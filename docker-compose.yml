@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  mysql-db:
+    image: mysql:8.2.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=luvina_jwt
+
+  myspring-boot:
+    container_name: spring-boot-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8080'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/luvina_jwt
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+    depends_on:
+      - mysql-db
